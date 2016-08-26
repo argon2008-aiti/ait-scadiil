@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block navbar%}
+<div class="navbar navbar-default navbar-fixed-top {{navbar_admin}}">
+<div class="nav-container">
+  <div class="navbar-header">
+	  <a class="navbar-brand {{navbar_admin_brand}}" href="#">{{title}}</a>
+  </div>
+  <div class="nav-menu-container">
+	  <ul class="nav-menu-list">
+		  <li class="nav-menu-item"><a class="menu-item-link" href="{% url 'student:activities' %}">
+				  Activities <span class="badge">3</span></a></li>
+		  <li class="nav-menu-item active"><a class="menu-item-link" href="{% url 'student:profile' %}">
+				  Profile</a></li>
+		  <li class="nav-menu-item"><a class="menu-item-link" href="{% url 'student:about' %}">
+				  About</a></li>
+	  </ul>
+  </div>
+
+</div>
+{% if user.is_authenticated %}
+<div class="user dropdown">
+  <a href="#" data-toggle="dropdown" class="dropdown-toggle" >
+	  <span class="fa fa-user"> </span> {{user.username|lower}}
+	  <span class="caret"></span> 
+  </a>
+  <ul class="dropdown-menu">
+	  <li><a href=""><span class="fa fa-lock"></span> Account</a></li>
+	  <li><a href="{% url logout %}"><span class="fa fa-arrow-right">
+			  </span> Logout</a>
+	  </li>
+  </ul>
+</div>
+{% endif %}
+</div>
+{% endblock %}
+
+{% block contents %}
+<div class="container">
+	<h3 class="section-header">University Seminar Attendance<span class="badge">
+			{{user.student.get_seminar_attendance}}</span></h3>
+<hr>
+<div class="section-container" style="min-height: 100px;">
+    <table class="table">
+        <thead>
+	   {% if user.student.get_seminar_attendance == 0 %}
+	   <div class="empty-section">
+		   <div class="center">
+	               <p>You have not attended any seminar yet!</p>
+		   </div>
+	   </div>
+	   {% else %}
+           <tr>
+	        <th>Seminar</th>   
+	        <th>Venue</th>   
+	        <th>Date</th>   
+	   </tr>
+	</thead>
+	<tbody>
+           <tr>
+	        <td>University Foundation Studies (UFS 101)</td>
+	        <td>Not Passed!</td>
+	   </tr>
+	   {% endif %}
+	</tbody>
+    </table>
+</div>
+<h3 class="section-header">SCADIIL Courses</h3>
+<hr>
+<div class="section-container" style="min-height: 0px;">
+    <table class="table">
+        <thead>
+           <tr>
+	        <th>Course</th>   
+	        <th>Status</th>   
+	   </tr>
+	</thead>
+	<tbody>
+	   {% if user.student.UFS_passed %}
+           <tr class="success">
+	        <td>University Foundation Studies (UFS 101)</td>
+	        <td>Passed!</td>
+	   </tr>
+	   {% else %}
+           <tr class="danger">
+	        <td>University Foundation Studies (UFS 101)</td>
+	        <td>Not Passed!</td>
+	   </tr>
+	   {% endif %}
+	   {% if user.student.CDES_passed %}
+           <tr class="success">
+	        <td>Career Development and Employability Skills (CDES 202)</td>
+	        <td>Passed!</td>
+	   </tr>
+	   {% else %}
+           <tr class="danger">
+	        <td>Career Development and Employability Skills (CDES 202)</td>
+	        <td>Not Passed!</td>
+	   </tr>
+	   {% endif %}
+	</tbody>
+    </table>
+</div>
+<h3 class="section-header">Internship Program</h3>
+<hr>
+<div class="section-container">
+     {% if user.student.internship == None %}
+	   <div class="empty-section">
+		   <div class="center">
+	               <p>You are not qualified for Internship Program yet!</p>
+		   </div>
+	   </div>
+     {% endif %}
+</div>
+<h3 class="section-header">Capstone Project</h3>
+<hr>
+<div class="section-container">
+     {% if user.student.capstone == None %}
+	   <div class="empty-section">
+		   <div class="center">
+	               <p>You are not qualified for Capstone Project yet!</p>
+		   </div>
+	   </div>
+     {% endif %}
+                	
+</div>
+
+</div>
+{% endblock %}

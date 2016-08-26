@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block navbar%}
+<div class="navbar navbar-default navbar-fixed-top {{navbar_admin}}">
+<div class="nav-container">
+  <div class="navbar-header">
+	  <a class="navbar-brand {{navbar_admin_brand}}" href="#">{{title}}</a>
+  </div>
+  <div class="nav-menu-container">
+	  <ul class="nav-menu-list">
+		  <li class="nav-menu-item active"><a class="menu-item-link" href="{% url 'student:activities' %}">
+				  Activities <span class="badge">3</span></a></li>
+		  <li class="nav-menu-item"><a class="menu-item-link" href="{% url 'student:profile' %}">
+				  Profile</a></li>
+		  <li class="nav-menu-item"><a class="menu-item-link" href="{%url 'student:about'%}">
+				  About</a></li>
+	  </ul>
+  </div>
+
+</div>
+{% if user.is_authenticated %}
+<div class="user dropdown">
+  <a href="#" data-toggle="dropdown" class="dropdown-toggle" >
+	  <span class="fa fa-user"> </span> {{user.username|lower}}
+	  <span class="caret"></span> 
+  </a>
+  <ul class="dropdown-menu">
+	  <li><a href=""><span class="fa fa-lock"></span> Account</a></li>
+	  <li><a href="{% url logout %}"><span class="fa fa-arrow-right">
+			  </span> Logout</a>
+	  </li>
+  </ul>
+</div>
+{% endif %}
+</div>
+{% endblock %}
+
+{% block contents %}
+<div class="container">
+<p>{{user.student.UFS_passed}}</p>
+<p>This is student activities page</p>
+</div>
+{% endblock %}
+

@@ -1,0 +1,155 @@
+{% extends "base.html"%}
+{% load widget_tweaks %}
+
+{% block contents %}
+{% block search %}
+{% endblock %}
+<div id=sidebar-wrapper class="">
+     <div class="bs-sidebar">
+	  <ul id="sidebar" class="" style="min-width:255px">
+	      <li><div class="menu-heading"><span class="fa fa-tachometer fa-fw"></span>
+		      Overview</div>
+		      <div class="submenu">
+			<ul class="submenu-wrapper nav nav-pills nav-stacked">
+				<li><a href="{% url 'admin:activities'%}">Activities 
+						<span class="hot badge">23</span></a></li>
+				<li><a href="{% url 'admin:messages'%}">Messages</a></li>
+				<li><a href="{% url 'admin:statistics'%}">Statistics</a></li>
+			</ul>
+		      </div>
+	      </li>
+	      <li class="active">
+		      <div class="menu-heading"><span class="fa fa-group fa-fw"></span>
+		      Students</div>
+		      <div class="submenu">
+			<ul class="submenu-wrapper nav nav-pills nav-stacked">
+				<li><a href="{% url 'admin:students-all'%}">All Enrolled Students</a></li>
+				<li><a href="{% url 'admin:students-complete'%}">Completion List</a></li> </ul> </div>
+	      </li>
+	      <li><div class="menu-heading"><span class="fa fa-file fa-fw"></span>
+		      Courses</div>
+		      <div class="submenu">
+			<ul class="submenu-wrapper nav nav-pills nav-stacked">
+				<li><a href="{% url 'admin:courses-ufs'%}">Foundation Studies</a></li>
+				<li><a href="{% url 'admin:courses-cdes'%}">Career Development</a></li>
+			</ul>
+		      </div>
+	      </li>
+	      <li><div class="menu-heading"><span class="fa fa-video-camera fa-fw"></span>
+		      University  Seminars</div>
+		      <div class="submenu">
+			<ul class="submenu-wrapper nav nav-pills nav-stacked">
+				<li class="active"><a href="{% url 'admin:seminars-all'%}">All Seminars</a></li>
+				<li><a href="{% url 'admin:seminars-upcoming'%}">Upcoming Seminars</a></li>
+				<li><a href="{% url 'admin:seminars-past'%}">Past Seminars</a></li>
+			</ul>
+		      </div>
+	      </li>
+	      <li class=""><div class="menu-heading"><span class="fa fa-briefcase fa-fw"></span>
+		      Internship  Program</div>
+		      <div class="submenu">
+			<ul class="submenu-wrapper nav nav-pills nav-stacked">
+				<li><a href="{% url 'admin:internship-pre-interns'%}">
+						Pre-Internship Students</a></li>
+				<li><a href="{% url 'admin:internship-at-post'%}">Students At Post</a></li>
+				<li><a href="{% url 'admin:internship-returnee'%}">Returnee Interns</a></li>
+				<li><a href="{% url 'admin:internship-complete'%}">Completion List</a></li>
+			</ul>
+		      </div>
+	      </li>
+	      <li><div class="menu-heading"><span class="fa fa-book fa-fw"></span>
+		      Capstone Project</div>
+		      <div class="submenu">
+			<ul class="submenu-wrapper nav nav-pills nav-stacked">
+				<li><a href="{% url 'admin:capstone-proposal'%}">
+						Proposal Students</a></li>
+				<li><a href="{% url 'admin:capstone-part-one'%}">Part One Students</a></li>
+				<li><a href="{% url 'admin:capstone-part-two'%}">Part Two Students</a></li>
+				<li><a href="{% url 'admin:capstone-viva'%}">Viva Students</a></li>
+				<li><a href="{% url 'admin:capstone-complete'%}">Completion List</a></li>
+			</ul>
+		      </div>
+	      </li>
+	  </ul>
+     </div>
+</div>
+    <div class="static-header">	
+	<div class="section-title text-nowrap">All Seminars</div>
+	<div id="search-wrapper">
+	    <div class="input-group" style="min-width:">
+		    <input type="text" class="form-control search" placeholder="Search... ">
+		    <span class="input-group-btn">
+			<button class="btn btn-primary search-btn" type="button">
+		              <span style="font-size: 1.5em" class="glyphicon glyphicon-search"></span>
+			</button>
+		    </span>
+	    </div>
+	    <div class="section-controls-wrapper text-no-wrap" style="min-width:980px">
+		    <div class="pull-left" style="margin-left: -30px">	
+			    <div id="student-count" class="section-item">
+				    total <span class="badge">{{object_list.count}}</span>
+			    </div>
+			    <div id="sates-count" class="section-item">
+				    sates <span class="badge">{{sates_count}}</span>
+			    </div>
+			    <div id="asdass-count" class="section-item">
+				    asdass <span class="badge">{{asdass_count}}</span>
+			    </div>
+			    <div id="abs-count" class="section-item">
+				    abs <span class="badge">{{abs_count}}</span>
+			    </div>
+		    </div>
+
+		    <div class="pull-right">	
+			    <div id="add-student" class="section-item">
+				<a href=""><span class="fa fa-play"> </span> New </a>
+			    </div>
+			    <div id="sort" class="section-item">
+				<a href=""><span class="fa fa-sort"> </span> Sort By</a>
+			    </div>
+			    <div id="filter" class="section-item">
+				<a href=""><span class="fa fa-filter"> </span> Filter</a>
+			    </div>
+			    <div id="export-excel" class="section-item">
+				<a href=""><span class="fa fa-upload"> </span> Export </a>
+			    </div>
+		    </div>
+
+	    </div>
+	</div>
+    </div>
+<div class="contents-wrapper">
+	<div class="main-contents container">
+		{% for seminar in object_list %}
+                <div class="list-wrapper seminar-list">
+			<a class="seminar-link" href="{% url "admin:seminar-details" seminar.pk %}">
+		<hr>
+			<div class="color-badge seminar-badge 
+				{% if seminar.date < today.date or seminar.date == today.date and seminar.time < today.time %}
+				seminar-past{% else %}seminar-upcoming{% endif %}">
+			
+			</div>
+			<div class="row seminar-title-margin">
+				<div class="col-xs-10">
+		        	     <p class="seminar-title">{{seminar.title}}</p>
+				</div>
+				<div class="seminar-school">
+					<span class="badge">{%if seminar.school == 1%}sates{% elif seminar.school == 2%}abs{% else %}asdass{% endif %}</span>
+				</div>
+			</div>
+			<div class="row seminar-info">
+		        	<p class="seminar-speaker col-xs-9">{{seminar.speaker}}</p>
+				<p class="seminar-date text-nowrap">{{seminar.date}} at {{seminar.time}}</p>
+			</div>
+			<div class="row seminar-synopsis">
+		        	<p class="seminar-description col-xs-12">{{seminar.description}}</p>
+			</div>
+		</a>
+		</div>
+		<hr>
+		{% empty %}
+		    <p>This list is empty!</p>
+		{% endfor %}
+	</div>
+</div>
+{% endblock %}

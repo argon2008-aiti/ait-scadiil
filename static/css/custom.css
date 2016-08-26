@@ -1,0 +1,818 @@
+h1 {
+    transition: font 0.2s;
+}
+
+@font-face {
+    font-family: 'Resagnicto';
+    src: url('../fonts/Resagnicto.ttf');
+}
+
+@font-face {
+    font-family: 'octapost';
+    src: url('../fonts/OCTAPOST_1.ttf');
+}
+
+.btn, .form-control, .alert {
+	
+    -webkit-border-radius: 0px;
+       -moz-border-radius: 0px;
+            border-radius: 0px;
+}
+
+.title {
+    width: 101%;
+    margin-top: -21px;
+    margin-left: -0.5%;
+}
+
+.alert {
+    margin-right: -15px;
+    margin-left: -15px;
+    margin-top: 0px;
+}
+
+.btn-primary {
+    background-color: #4CAF50;
+    border: 0px;
+    border-radius: 0px;
+}
+
+.btn-primary:active:focus, .btn-primary:focus, .btn-primary:link {
+    border-color: #50a050;
+    background-color: #50a050;
+    box-shadow: none;
+    outline: none;
+}
+
+.btn-primary:active:focus {
+    background-color: #5C945C;
+}
+
+.btn-primary:hover {
+    background-color: #50a050;
+}
+
+.btn-primary.disabled:hover, .btn-primary[disabled]:hover {
+    background-color: #50a050;
+}
+
+.container {
+    margin-top: 50px;
+}
+
+.main-contents {
+    margin-left: 20px;
+    width: 85%;
+    margin-top: 0px;
+    position: relative;
+}
+
+.list-wrapper{
+    margin-top: 5px;
+}
+
+.bs-sidebar {
+    background-color: #dedede;
+    border-radius: 0px;
+    height: 100%;
+    position: fixed;
+    overflow: hidden;
+}
+
+.bs-sidebar:hover,
+.bs-sidebar:focus {
+    overflow-y: auto;
+}
+
+.bs-sidebar:hover .hot.badge {
+    margin-right: 10px;
+}
+
+#sidebar {
+    z-index: 100;
+    margin-top: 30px;
+    padding-left: 15px;
+}
+
+#sidebar > li {
+    font-size: 18px;
+    margin-left: -10px;
+}
+
+#sidebar-wrapper {
+    z-index: 1000;
+}
+
+.menu-heading{
+    padding: 5px 0px;
+}
+
+.submenu a:hover, .submenu a:focus {
+    color: #fff;
+    text-decoration: none;
+}
+
+.submenu-wrapper.nav > li {
+    background-color: #f5f5f5;
+    color: #fff;
+    border-radius: 0px;
+    font-size: 14px;
+}
+
+.submenu-wrapper.nav > li > a,
+.submenu-wrapper.nav > li > a:link {
+    background-color: #f5f5f5;
+    color: #000;
+    border-radius: 0px;
+    padding: 8px 10px;
+    padding-left: 50px;
+    border-bottom: 1px solid #dedede;
+    margin-top: -2px;
+}
+
+.submenu-wrapper.nav > li > a:hover,
+.submenu-wrapper.nav > li > a:focus {
+    background-color: #fff;
+    color: #50a050;
+}
+.submenu-wrapper.nav-pills > li.active > a,
+.submenu-wrapper.nav-pills > li.active > a:hover,
+.submenu-wrapper.nav-pills > li.active > a:focus {
+    color: #fff;
+    background-color: #50a050;
+    font-weight: 600;
+}
+
+.submenu {
+    margin-left: -5px;
+    background-color: #efefef;
+}
+
+.submenu-wrapper {
+    background-color: #efefef;
+}
+
+.nav-pills>.active>a>.badge {
+    color: #50a050;
+}
+
+.static-header {
+    margin-top: 25px;
+    left: 255px;
+    right: 0px;
+    height: 112px;
+    background-color: #fff;
+    position: fixed;
+    border-bottom: 1px solid #dfdfdf;
+    /*box-shadow: 0px 1px 5px 0px #ccc;*/
+    min-width: 600px;
+    z-index: 100;
+}
+
+#statistics-header {
+    height: 70px;
+}
+
+#search-wrapper {
+    height: 60px;
+    margin-top: 10px;
+    margin-right: 20px;
+    margin-left: 20px;
+    min-width: 715px;
+}
+
+.hot.badge {
+    float: right;
+    transition: margin 0.2s;
+}
+
+.contents-wrapper {
+    width: 80%; 
+    margin-left: 270px;
+    padding-top: 150px;
+    position: absolute;
+    height: 100%;
+}
+
+#login-container {
+    margin-top: 100px;
+}
+
+.form-control, .search-btn {
+    height: 40px;
+}
+
+#login-container {
+    margin-top: 100px;
+}
+
+.form-control, .search-btn {
+    height: 40px;
+}
+
+button.search-btn {
+    width: 60px;
+}
+
+.form-control:focus { 
+    border-color: rgb(200, 200, 200);
+    box-shadow: 0px 1px 3px 0px rgb(170, 170, 170);
+}
+
+.section-title {
+    float: left;
+    font-size: 40px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 3px;
+    color: #222;
+}
+
+.section-controls-wrapper {
+    height: 40px;
+    background-color: #fff;
+    margin-top: 20px;
+    margin-right: 3px;
+    white-space: nowrap;
+}
+
+.section-item {
+    float: left;
+    margin-left: 30px;
+    font-size: 22px;
+}
+
+.section-item > a {
+    color: #222;
+    outline: none;
+    text-decoration: none;
+}
+
+.section-item > a:hover {
+    color: #50a050;
+}
+
+.search.form-control { 
+    font-size: 25px;
+}
+
+.search.form-control:focus { 
+    box-shadow: none;
+    z-index: 0;
+}
+
+.has-error .form-control:focus {
+    box-shadow: none; 
+}
+
+.has-success .form-control:focus {
+    box-shadow: none; 
+}
+
+.radio-group {
+    padding-bottom: 20px;
+}
+
+.form-container {
+    border: 1px #dfdfdf solid;
+    padding: 20px 15px 20px 15px;
+    margin-bottom: 50px;
+}
+
+.form-container.compact-login-form {
+    position: absolute;
+    left: 30%;
+    top: 180px;
+    width: 500px;
+}
+
+.navbar.navbar-admin.navbar-default {
+    background-color: #50a050;
+    font-family: initial;
+}
+
+.register {
+    height: 234px;
+    padding-left: 15px;
+}
+
+.col-container {
+    height: 234px;
+    margin: 0 auto;
+}
+
+#register-button {
+    margin-top: 138px;
+}
+
+.btn-link:link {
+    text-decoration: none;
+}
+
+.login-button {
+    float: left;
+}
+
+.no-spacing-top {
+    margin-top: 0px;
+}
+
+#enrolled_yet {
+    font-size: 23px;
+    margin-top: 0px;
+}
+
+.btn {
+    display: block;
+    width: 100%;
+}
+
+.h1, h1 {
+    font-size: 18px;
+}
+
+@media only screen and (min-width: 320px){
+    h1 {
+       font-size: 24px; 
+    }
+
+    #student-login-container {
+       /*height: 260px;*/ 
+    }
+
+    a.pull-right {
+       margin-top: 15px; 
+    }
+
+}
+
+@media only screen and (min-width: 480px){
+    h1 {
+       font-size: 30px; 
+    }
+
+    .register {
+	padding-left: 15px;    
+    }
+
+    .btn {   
+	width: 200px;
+    }
+
+    #enrolled_yet {
+       font-size: 32px; 
+    }
+
+    a.pull-right {
+       margin-top: 0px; 
+    }
+
+    #student-login-container {
+       /*height: 240px;*/ 
+    }
+
+}
+
+@media only screen and (min-width: 768px){
+    h1 {
+       font-size: 40px; 
+    }
+
+    #student-registration {
+	height: 950px;  
+    }
+    .register {
+	padding-left: 15px;    
+    }
+    #enrolled_yet {
+       font-size: 38px; 
+    }
+
+    #student-login-container {
+       /*height: 240px;*/ 
+    }
+
+}
+
+@media only screen and (min-width: 787px){
+}
+
+@media only screen and (min-width: 992px){
+    h1 {
+       font-size: 40px; 
+    }
+
+    #student-registration {
+	/*height: 550px;*/  
+    }
+
+    .register {
+	padding-left: 50px;    
+    }
+    
+    #register-button {
+       margin-top: 97px; 
+    }
+
+}
+
+@media only screen and (min-width: 1200px){
+    #register-button {
+       margin-top: 139px; 
+    }
+
+}
+
+.custom-radio {
+    opacity: 0;
+    position: absolute;
+}
+
+.custom-radio, .radio-label {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 5px;
+}
+
+.custom-radio + .radio-label:before {
+    content: '';
+    background: #fff;
+    border: 1px solid #ccc;
+    display: inline-block;
+    vertical-align: middle;
+    width: 20px;
+    height: 20px;
+    padding: 2px;
+    margin-right: 10px;
+    text-align: center;
+}
+
+.custom-radio:checked + .radio-label:before {
+    background: #4CAF50;
+    border: 1px solid #4CAF50; 
+    box-shadow: inset 0px 0px 0px 3px #fff;
+}
+
+.custom-radio + .radio-label:before {
+    border-radius: 50%;
+   
+}
+
+.custom-radio:hover + .radio-label:before, 
+.custom-radio:focus + .radio-label:before {
+    border: 1px solid #4CAF50; 
+}
+
+.checkbox + .checkbox, .radio + .radio {
+    margin-top: 10px;
+}
+
+.navbar.navbar-default {
+    background-color: #5f5f5f;
+    border: 0px;
+    box-shadow: 0px;
+}
+
+.navbar-default .navbar-brand, .user>a {
+    color: #f9f9f9;
+    outline: none;
+    text-decoration: none;
+}
+
+.navbar-default .navbar-brand:focus,
+.navbar-default .navbar-brand:hover,
+.user>a:hover,
+.user>a:focus {
+    color: #ffffff;
+}
+
+.navbar-brand, .user {
+    font-size: 25px;
+    font-family: 'octapost';
+    height: 30px;
+    padding: 0px 0px 0px 15px;
+    line-height: 30px;
+}
+.user {
+    margin-right: 20px;
+    font-family: "Helvetica Nue", Helvetica, Arial, sans-serif;
+    position: fixed;
+    right: 0px;
+    font-size: 20px;
+    background-color: #4b974b;
+    padding-right: 15px;
+}
+
+.dropdown-menu {
+    border-radius: 0px;
+}
+
+.dropdown-menu > li > a {
+    font-size: 16px;
+}
+
+.dropdown-menu > li > a:hover {
+    background-color: #50a050;
+    color: #fff; 
+}
+
+.align-center {
+    margin-left: 280px;
+    position: absolute;
+}
+
+.navbar {
+    min-height: 10px;
+}
+
+.footer {
+    background-color: #5f5f5f;
+    height: 200px;
+    width: 100%;
+    display: block;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.capitalize {
+    text-transform: capitalize;
+}
+
+.server-message {
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+.forgot-password  {
+    padding-top: 8px;
+}
+
+.forgot-password-static a {
+    position: absolute;
+    right: 15px; 
+}
+
+#student-login-container {
+    overflow: hidden;
+}
+
+.forgot-password a {
+    text-decoration: none;
+    color: #888;
+    outline: none;
+}
+
+.forgot-password a:hover {
+    color: #50a050;
+}
+
+.color-badge {
+    width: 5px;
+    height: 35px;
+    float: left;
+    margin-left: -15px;
+}
+
+.color-badge.seminar-badge {
+    height: 100px;
+    margin-top: 5px;
+}
+
+.seminar-list {
+    margin-top: 20px;
+}
+
+.seminar-past {
+    background-color: #a94442;
+}
+
+.seminar-upcoming {
+    background-color: #378e62;
+}
+
+.seminar-title {
+    font-size: 24px;
+    margin-bottom: 0px;
+}
+
+.seminar-speaker, .seminar-date {
+    font-size: 16px;
+    margin-bottom: 2px;
+    padding-left: 0px;
+    color: #555;
+    font-style: italic;
+}
+.seminar-date {
+    position: absolute;
+    right: 0px;
+    padding-right: 15px;
+    margin-top: 35px;
+}
+
+.seminar-title-margin:after, .seminar-title-margin:before, 
+.seminar-info:after, .seminar-info:before {
+    content: none;
+}
+
+.seminar-title-margin .col-xs-10 {
+    padding-left: 5px;
+}
+
+.row.seminar-info {
+    margin: 0px;
+}
+
+.seminar-synopsis {
+    margin-top: 0px;
+}
+
+.seminar-description {
+    margin-left: -5px;
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+.seminar-school {
+    position: absolute;
+    padding-right: 15px;
+    right: 0;
+    margin-top: 10px;
+}
+
+a.seminar-link p.seminar-speaker {
+    color: #555;
+}
+
+a.seminar-link p.seminar-title {
+    color: #333;
+}
+
+a.seminar-link p.seminar-description {
+    color: #333;
+}
+
+.seminar-link:hover .seminar-title {
+    color: green; 
+}
+
+.seminar-link:focus .seminar-title {
+    color: #378e62; 
+}
+
+.seminar-link:focus .seminar-list {
+    border: none;
+}
+
+.bottom-bar, .top-bar {
+    width: 100%;
+    height: 1px;
+    background: #eee;
+}
+
+.list-item-name {
+    font-size: 16px;
+    margin-top: 5px;
+    padding-bottom: 0px;
+}
+
+.list-item-link {
+    text-decoration: none;
+    color: #333;
+}
+
+.uss-attendance {
+    margin-left: 100px;
+    margin-top: 5px;
+}
+
+.uss-attendance .badge {
+    font-size: 18px;
+}
+
+.keep-left {
+    float: left;
+}
+
+hr {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.scadiil-0 .color-badge {
+    background: #378e62;    
+}
+
+.list-item,
+.list-item a:focus {
+    color: #333;
+}
+
+.list-item a:hover {
+    color: #fff;
+    font-weight: 600;
+}
+
+.list-item:hover {
+    background: #50a050;
+}
+
+.list-item:hover .uss-attendance .badge {
+    background: #fff;
+    color: #378e62;
+}
+
+.list-item:hover .color-badge {
+    background-color: #50a050;
+}
+.list-item {
+}
+
+.navigation-bar {
+    height: 60px;
+    background-color: black;
+    width: 100%;
+}
+
+.nav-menu-list {
+    list-style: none;
+    font-size: 20px;
+    float: left;
+    position: absolute;
+    height: 30px;
+    left: 350px;
+}
+
+.nav-menu-list li {
+    display: inline-block;
+}
+
+.nav-menu-item a {
+    color: #eee;
+    text-decoration: none;
+    padding: 0 10px;
+}
+
+.nav-menu-item:focus,
+.nav-menu-item:hover {
+    color: #fff;
+    text-decoration: none;
+    background: #000;
+}
+
+li.nav-menu-item.active  span.badge {
+    background: #5f5f5f;
+    font-size: 15px;
+}
+
+li.nav-menu-item  span.badge {
+    background: #4b974b;
+    font-size: 15px;
+}
+
+li.nav-menu-item.active {
+    background-color: #4b974b;
+}
+
+li.nav-menu-item.active a {
+    color: #fff;
+}
+
+li.nav-menu-item.active a:focus {
+    outline: none;
+}
+
+li.nav-menu-item.active a:link {
+    outline: none;
+}
+
+.nav-menu-item {
+    padding: 0px 25px;
+    margin-left:30px;
+    line-height: 1.5;
+}
+
+.section-container {
+    margin-top: 10px;
+}
+
+.section-header {
+    margin-top: 20px;
+}
+
+.section-header .badge {
+    float: right;
+    font-size: 18px;
+}
+
+.empty-section {
+    height: 200px;
+}
+
+.center {
+    padding-top: 80px;
+    text-align: center;
+    font-size: 28px;
+    font-weight: 100px;
+}
