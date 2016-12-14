@@ -25,7 +25,7 @@ SECRET_KEY = '4=&_)vzhvv=2iu%l+@_w0os@&2bm8-gvt-1jk78lrv&r&frk^s'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.herokuapp.com']
 
 # Email sending configurations
 if DEBUG:
@@ -120,3 +120,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static_root")
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
+
+import dj_database_url
+DATABASES['default'] = dj_database_url.config()
