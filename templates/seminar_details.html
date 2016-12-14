@@ -1,5 +1,59 @@
 {% extends "base.html" %}
+{% load widget_tweaks %}
 {% block contents %}
-<div class="section-title">Seminar Details</div>
-{{pk}}
+<div class="container">
+<div class="page-title">Seminar Details</div>
+<hr>
+	<div class="seminar-detail-page">
+		<h4><b>Title:</b> {{object.title}}</h4>
+		<p><b>Speaker:</b> {{object.speaker}}</p>
+		<p><b>Description:</b></p>
+		<p class="seminar-detail-description">{{object.description}}</p>
+		<div class="seminar-detail-info"><b>Date:</b> {{object.date}}</div>
+		<div class="seminar-detail-info"><b>Time:</b> {{object.time}}</div>
+		<div class= ""><b>School:</b> {%if seminar.school == 1%}SATES{% elif seminar.school == 2%}ABS{% else %}ASDASS{% endif %}</div>
+          	{% if object.date < today.date or object.date == today.date and object.time < today.time %}
+		        {% if attendance_count == 0 %}
+			<div class="attendance upload">
+				<a href="/admin/seminars/attendance/{{object.pk}}" class="btn btn-primary" id="">
+				     Upload Attendance Sheet	
+				</a>  
+			</div>
+			{% else %}
+			<div class="seminar-attendance-list"><b>Attendance List:</b>  <span class="badge">{{attendance_count}}</span></div>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>ID Number</th>
+				</tr>
+
+			</thead>
+			<tbody>
+				{% for entry in object.seminarattendance_set.all %}
+				<tr>
+					<td>{{entry.student.user.first_name}} {{entry.student.middle_name}} {{entry.student.user.last_name}}</td>
+				       <td>{{entry.student.user.username}}</td>
+			       </tr>
+			       {% empty %}
+			       <p>malformed gradesheet</p>
+			       {% endfor %}
+			</tbody>
+		</table>
+			{% endif %}
+
+	       	{% else %}
+			<div class="seminar-edit-link text-nowrap">
+				<a href="/admin/seminars/edit/{{object.pk}}"  id="">
+					Edit this Seminar
+				</a>  
+			</div>
+		{% endif %}
+
+	</div>
+</div>
+{% endblock %}
+
+{% block footer %}
+{% include 'admin_footer.html'%}
 {% endblock %}

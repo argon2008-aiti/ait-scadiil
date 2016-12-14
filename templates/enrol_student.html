@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block contents %}
+<div class="container">
+        <div class="page-title">Enrol New Student</div>
+    <div class="form-container" id="student-registration-form">
+    {% if messages %}
+        <div class="title">
+	    {% for message in messages %}
+	        {% if 'id_available' in message.extra_tags %}
+			<script>
+			     id_error = true;
+			</script>
+		    <div class="alert alert-danger" id="">
+			    <p class='server-message'> {{ message }} </p>
+		    </div>
+		{% endif %}
+	    {% endfor %}
+        </div>
+    {% endif %}
+	    <form class="" action="#" id="registration-form" role="form" method="post">
+		    {% csrf_token %}
+		    <div class="row">
+		        <div class="form-group col-md-6">
+			    <label class="control-label" for="{{form.first_name.auto_id}}">
+				    {{form.first_name.label}}
+			    </label>
+				    {% render_field form.first_name class+="form-control capitalize" %}
+		        </div>
+
+		        <div class="form-group col-md-6">
+			    <label class="control-label" for="{{form.middle_name.auto_id}}">
+				    {{form.middle_name.label}}
+			    </label>
+				    {% render_field form.middle_name class+="form-control capitalize" %}
+		        </div>
+		    </div>
+
+		    <div class="row">
+		        <div class="form-group col-md-6">
+			    <label class="control-label" for="{{form.surname.auto_id}}">
+				    {{form.surname.label}}
+			    </label>
+				    {% render_field form.surname class+="form-control capitalize" %}
+		        </div>
+
+			<div class="form-group col-md-6 {% if 'id_available' in message.extra_tags %} has-error
+			{% endif %}">
+			    <label class="control-label" for="{{form.id_number.auto_id}}">
+				    {{form.id_number.label}}
+			    </label>
+				    {% render_field form.id_number class+="form-control uppercase" %}
+		        </div>
+		    </div>
+
+		    <div class="row">
+		        <div class="form-group col-md-6">
+			    <label class="control-label" for="{{form.phone_number.auto_id}}">
+				    {{form.phone_number.label}}
+			    </label>
+				    {% render_field form.phone_number class+="form-control" %}
+		        </div>
+
+		        <div class="form-group col-md-6">
+			    <label class="control-label" for="{{form.email_address.auto_id}}">
+				    {{form.email_address.label}}
+			    </label>
+				    {% render_field form.email_address class+="form-control" %}
+		        </div>
+		    </div>
+
+		<div class="form-group">
+	        <label class="control-label">Program</label>
+		<div class="radio-group row">
+			<div class="col-sm-5 radio">
+				<input class="custom-radio" type="radio"
+				name="program" id="sates" value=1>
+				<label class="radio-label" for="sates">
+				Engineering (Electrial and Electronic, Civil, Computer)
+				</label>
+			</div>
+			<div class="col-sm-3 radio">
+				<input class="custom-radio" type="radio" 
+				name="program" id="abs" value=2>
+				<label class="radio-label" for="abs">
+					Business Administration
+				</label>
+			</div>
+			<div class="col-sm-4 radio">
+				<input class="custom-radio" type="radio"
+				name="program" id="asdass" value=3>
+				<label class="radio-label" for="asdass">
+					Computer Science / Information Technology
+				</label>
+			</div>
+		</div>
+		</div>
+		<div class="">
+			<button type="submit" class="btn btn-primary" id="">
+				Enrol This Student
+			</button>  
+		</div>
+	    </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<div class="footer admin container">
+
+</div>
+{% endblock %}
+
+

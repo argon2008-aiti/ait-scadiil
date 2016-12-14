@@ -12,7 +12,7 @@
 		      <div class="submenu">
 			<ul class="submenu-wrapper nav nav-pills nav-stacked">
 				<li><a href="{% url 'admin:activities'%}">Activities 
-						<span class="hot badge">23</span></a></li>
+						<span class="hot badge">{{upcoming_activities_count}}</span></a></li>
 				<li><a href="{% url 'admin:messages'%}">Messages</a></li>
 				<li><a href="{% url 'admin:statistics'%}">Statistics</a></li>
 			</ul>
@@ -103,7 +103,8 @@
 
 		    <div class="pull-right">	
 			    <div id="add-student" class="section-item">
-				<a href=""><span class="fa fa-download"> </span> New Grades</a>
+				    <a href="{% url 'admin:ufs-new'%}">
+					    <span class="fa fa-download"> </span> New Grades</a>
 			    </div>
 			    <div id="sort" class="section-item">
 				<a href=""><span class="fa fa-sort"> </span> Sort By</a>
@@ -136,7 +137,13 @@
 				  <p class="list-item-name">{{student.user.username}}</p> 
 			  </div>
 			  <div class="col-xs-3">
+				  {% if student.program == 1 %}
 				  <p class="list-item-name">EEE</p> 
+				  {% elif student.program == 2 %}
+				  <p class="list-item-name">ABS</p> 
+				  {% else %}
+				  <p class="list-item-name">ASDASS</p> 
+				  {% endif %}
 			  </div>
 		        </a>
 		     </div>

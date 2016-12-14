@@ -2,6 +2,11 @@ h1 {
     transition: font 0.2s;
 }
 
+html, body {
+    min-height: 100%;
+    height: 100%;
+}
+
 @font-face {
     font-family: 'Resagnicto';
     src: url('../fonts/Resagnicto.ttf');
@@ -423,18 +428,18 @@ button.search-btn {
 
 }
 
-.custom-radio {
+.custom-radio, .custom-check {
     opacity: 0;
     position: absolute;
 }
 
-.custom-radio, .radio-label {
+.custom-radio,.custom-check, .radio-label, .check-label {
     display: inline-block;
     vertical-align: middle;
     margin: 5px;
 }
 
-.custom-radio + .radio-label:before {
+.custom-check + .check-label:before, .custom-radio + .radio-label:before {
     content: '';
     background: #fff;
     border: 1px solid #ccc;
@@ -447,7 +452,7 @@ button.search-btn {
     text-align: center;
 }
 
-.custom-radio:checked + .radio-label:before {
+.custom-radio:checked + .radio-label:before, .custom-check:checked + .check-label:before {
     background: #4CAF50;
     border: 1px solid #4CAF50; 
     box-shadow: inset 0px 0px 0px 3px #fff;
@@ -459,6 +464,7 @@ button.search-btn {
 }
 
 .custom-radio:hover + .radio-label:before, 
+.custom-check:hover + .check-label:before, 
 .custom-radio:focus + .radio-label:before {
     border: 1px solid #4CAF50; 
 }
@@ -580,15 +586,17 @@ button.search-btn {
     margin-top: 5px;
 }
 
+.color-badge.past
+
 .seminar-list {
     margin-top: 20px;
 }
 
-.seminar-past {
+.seminar-past, .activity-past {
     background-color: #a94442;
 }
 
-.seminar-upcoming {
+.seminar-upcoming, .activity-upcoming {
     background-color: #378e62;
 }
 
@@ -618,6 +626,7 @@ button.search-btn {
 
 .seminar-title-margin .col-xs-10 {
     padding-left: 5px;
+    margin-left: 5px;
 }
 
 .row.seminar-info {
@@ -723,10 +732,17 @@ hr {
     color: #378e62;
 }
 
+.list-item:hover .badge.date,
 .list-item:hover .color-badge {
     background-color: #50a050;
 }
-.list-item {
+
+
+.badge.date {
+    font-size: 14px;
+    border-radius: 0px;
+    padding: 7px 5px;
+    width: 140px;
 }
 
 .navigation-bar {
@@ -795,6 +811,7 @@ li.nav-menu-item.active a:link {
 
 .section-container {
     margin-top: 10px;
+    margin-bottom: 100px;
 }
 
 .section-header {
@@ -815,4 +832,93 @@ li.nav-menu-item.active a:link {
     text-align: center;
     font-size: 28px;
     font-weight: 100px;
+}
+.center.student-details {
+    padding-top: 20px;
+    font-size: 18px;
+    margin-left: 30px;
+}
+
+.page-title {
+    margin-top: 20px;
+    font-size: 28px;
+}
+.title-separator {
+    margin-bottom: 20px;
+}
+.right {
+
+}
+
+.footer.admin {
+    background-color: #50a050;
+}
+
+.accept-grade.upload, .attendance.upload , .upload {
+    margin-top: 30px;
+}
+
+.attendance.upload {
+    float: left;
+    margin-right: 40px;
+}
+
+.seminar-edit-link {
+    margin-top: 25px;
+}
+
+.seminar-edit-link a {
+    color: #666;
+}
+
+.seminar-edit-link a:hover {
+    color: #50a050;
+}
+
+.form-container.gradesheet-form {
+    margin-bottom: 150px;
+}
+
+.page-title.grade-title {
+    float: left;
+}
+
+.grade-summary {
+    font-size: 22px;
+    float: right;
+    margin-top: 30px;
+    margin-left: 30px;
+}
+
+.seminar-detail-page, .student-detail-page {
+    min-height: 300px;
+}
+
+.seminar-detail-page {
+    margin-top: 20px;
+}
+
+.sub-heading {
+    font-size: 20px;
+    margin-top: 30px;
+}
+
+.seminar-detail-description {
+    color: #444;
+}
+
+.seminar-detail-info {
+    float: left;
+    margin-right: 40px;
+}
+
+.badge.past.attendance {
+    background-color: #50a050;
+}
+
+.badge.past.no-attendance {
+    background-color: #a94442;
+}
+.seminar-attendance-list {
+    margin-top: 30px;
 }

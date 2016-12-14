@@ -1,5 +1,6 @@
 {% extends "base.html"%}
 {% load widget_tweaks %}
+{% load info_system_extras %}
 
 {% block contents %}
 {% block search %}
@@ -12,7 +13,7 @@
 		      <div class="submenu">
 			<ul class="submenu-wrapper nav nav-pills nav-stacked">
 				<li class="active"><a href="{% url 'admin:activities'%}">Activities 
-						<span class="hot badge">23</span></a></li>
+						<span class="hot badge">{{upcoming_activities_count}}</span></a></li>
 				<li><a href="{% url 'admin:messages'%}">Messages</a></li>
 				<li><a href="{% url 'admin:statistics'%}">Statistics</a></li>
 			</ul>
@@ -87,22 +88,22 @@
 	    <div class="section-controls-wrapper text-no-wrap" style="min-width:980px">
 		    <div class="pull-left" style="margin-left: -30px">	
 			    <div id="activities-count" class="section-item">
-				total <span class="badge">58</span>
+				    total <span class="badge">{{object_list.count}}</span>
 			    </div>
 			    <div id="activities-past" class="section-item">
-				past <span class="badge">35</span>
+				    past <span class="badge">{{object_list|past_count}}</span>
 			    </div>
 			    <div id="activities-upcoming" class="section-item">
-				upcoming <span class="badge">23</span>
+				    upcoming <span class="badge">{{object_list|upcoming_count}}</span>
 			    </div>
 			    <div id="activities-hot" class="section-item">
-				hot <span class="badge">3</span>
+				    hot <span class="badge">{{object_list|hottize:3}}</span>
 			    </div>
 		    </div>
 
 		    <div class="pull-right">	
 			    <div id="add-activity" class="section-item">
-				<a href=""><span class="fa fa-plus"> </span> Add</a>
+				    <a href="{% url 'admin:activities-new'%}"><span class="fa fa-plus"> </span> Add</a>
 			    </div>
 			    <div id="sort" class="section-item">
 				<a href=""><span class="fa fa-sort"> </span> Sort By</a>
@@ -120,50 +121,37 @@
     </div>
 <div class="contents-wrapper">
 	<div class="main-contents">
-		{% for student in object_list %}
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
-		<p>{{ student.user.first_name}} {{student.user.last_name}} -- {{student.user.username}}</p>
+		{% for activity in object_list %}
+		<div class="list-wrapper">
+	           <div class="row list-item">
+			   <a class="list-item-link" href="{% url "admin:activity-details" activity.pk %}">
+		          <div class="col-xs-8">
+			       <div class="color-badge
+				{% if activity.date < today.date or activity.date == today.date and activity.time < today.time %}
+				 activity-past{% else %} activity-upcoming{% endif %}">
+			       </div>   
+			       <p class="list-item-name text-nowrap">{{activity.title|upper}}</p>
+			  </div>
+			  <div class="col-xs-2">
+				  {% if activity.target_school == 1 %}
+				  <p class="list-item-name">SATES</p> 
+				  {% elif activity.target_school == 2 %}
+				  <p class="list-item-name">ABS</p> 
+				  {% else %}
+				  <p class="list-item-name">ASDASS</p> 
+				  {% endif %}
+			  </div>
+			  <div class="col-xs-2">
+			     <div class="">
+				     <span class="badge date">{{activity.date|date:"D j M, Y"}}</span>
+			     </div>
+			  </div>
+		        </a>
+		     </div>
+		</div>
+		<hr>
 		{% empty %}
-		    <p>No student has enrolled yet!</p>
+		    <p>No activities are available to display</p>
 		{% endfor %}
 	</div>
 </div>

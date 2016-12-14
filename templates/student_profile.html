@@ -52,15 +52,20 @@
 	   {% else %}
            <tr>
 	        <th>Seminar</th>   
+	        <th>Speaker</th>   
 	        <th>Venue</th>   
 	        <th>Date</th>   
 	   </tr>
 	</thead>
 	<tbody>
+		{% for attendance in user.student.seminarattendance_set.all %}
            <tr>
-	        <td>University Foundation Studies (UFS 101)</td>
-	        <td>Not Passed!</td>
+		   <td>{{attendance.seminar.title}}</td>
+		   <td>{{attendance.seminar.speaker}}</td>
+		   <td>{{attendance.venue}}</td>
+		   <td>{{attendance.seminar.date}}</td>
 	   </tr>
+	        {% endfor %}
 	   {% endif %}
 	</tbody>
     </table>
@@ -104,10 +109,8 @@
 <h3 class="section-header">Internship Program</h3>
 <hr>
 <div class="section-container">
-     {% if user.student.internship == None %}
-	   <div class="empty-section">
-		   <div class="center">
-	               <p>You are not qualified for Internship Program yet!</p>
+     {% if user.student.internship == None %} <div class="empty-section"> <div class="center">
+	               <p>You are not qualified to start Internship Program!</p>
 		   </div>
 	   </div>
      {% endif %}
@@ -118,7 +121,7 @@
      {% if user.student.capstone == None %}
 	   <div class="empty-section">
 		   <div class="center">
-	               <p>You are not qualified for Capstone Project yet!</p>
+	               <p>You are not qualified to start Capstone Project!</p>
 		   </div>
 	   </div>
      {% endif %}
@@ -126,4 +129,13 @@
 </div>
 
 </div>
+{% endblock %}
+
+{% block footer %}
+	<div class="footer">
+	    <div class="container">
+	    
+	    </div>
+
+	</div>
 {% endblock %}

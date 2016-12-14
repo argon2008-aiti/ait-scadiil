@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load widget_tweaks %}
+{% load info_system_extras %}
 {% block navbar%}
 <div class="navbar navbar-default navbar-fixed-top {{navbar_admin}}">
 <div class="nav-container">
@@ -9,7 +10,7 @@
   <div class="nav-menu-container">
 	  <ul class="nav-menu-list">
 		  <li class="nav-menu-item active"><a class="menu-item-link" href="{% url 'student:activities' %}">
-				  Activities <span class="badge">3</span></a></li>
+				  Activities <span class="badge">{{object_list.count}}</span></a></li>
 		  <li class="nav-menu-item"><a class="menu-item-link" href="{% url 'student:profile' %}">
 				  Profile</a></li>
 		  <li class="nav-menu-item"><a class="menu-item-link" href="{%url 'student:about'%}">
@@ -37,8 +38,39 @@
 
 {% block contents %}
 <div class="container">
-<p>{{user.student.UFS_passed}}</p>
-<p>This is student activities page</p>
+	<div class="page-title" style="margin-bottom: 20px;">All Your Activities</div>
+		{% for activity in object_list %}
+		<div class="list-wrapper">
+	           <div class="row list-item">
+			   <a class="list-item-link" href="{% url 'student:activity-details' activity.pk %}">
+		          <div class="col-xs-8">
+			       <div class="color-badge
+				{% if activity.date < today.date or activity.date == today.date and activity.time < today.time %}
+				 activity-past{% else %} activity-upcoming{% endif %}">
+			       </div>   
+			       <p class="list-item-name text-nowrap">{{activity.title|upper}}</p>
+			  </div>
+			  <div class="col-xs-2">
+				     <p class="list-item-name">{{activity.date|date:"D j M, Y"}}</p>
+			  </div>
+			  <div class="col-xs-2">
+				  <span class="badge date">{{activity.date|human_date}}</span>
+			  </div>
+		        </a>
+		     </div>
+		</div>
+		<hr>
+		{% empty %}
+		    <p>No activities are available to display</p>
+		{% endfor %}
 </div>
 {% endblock %}
 
+{% block footer %}
+	<div class="footer">
+	    <div class="container">
+	    
+	    </div>
+
+	</div>
+{% endblock %}

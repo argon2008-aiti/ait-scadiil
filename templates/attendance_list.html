@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block contents %}
+<div class="container">
+	<div class="page-title grade-title">Review Seminar Attendance</div>
+	<div class=grade-summary> total <span class="badge">{{total}}</span></div>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>ID Number</th>
+			</tr>
+
+		</thead>
+		<tbody>
+			{% for key, value in attendance.items %}
+			<tr>
+			       <td>{{value.0}}</td>
+			       <td>{{value.1}}</td>
+		       </tr>
+		       {% empty %}
+		       <p>malformed attendance sheet</p>
+		       {% endfor %}
+		</tbody>
+	</table>
+		<div class="accept-grade upload">
+			<a href="/admin/seminar/{{pk}}/attendance/upload/" class="btn btn-primary" id="">
+				Accept and Save
+			</a>  
+		</div>
+</div>
+{% endblock %}
+
+{% block footer %}
+{% include 'admin_footer.html'%}
+{% endblock %}

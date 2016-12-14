@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block contents %}
+<div class="container">
+<div class="page-title">Activity Details</div>
+<hr>
+	<div class="seminar-detail-page">
+		<h4><b>Title:</b> {{object.title}}</h4>
+		<p><b>Description:</b></p>
+		<p class="seminar-detail-description">{{object.description}}</p>
+		<div class="seminar-detail-info"><b>Date:</b> {{object.date}}</div>
+		<div class="seminar-detail-info"><b>Time:</b> {{object.time}}</div>
+		<div class= ""><b>School:</b> {%if seminar.school == 1%}SATES{% elif seminar.school == 2%}ABS{% else %}ASDASS{% endif %}</div>
+          	{% if object.date > today.date or object.date == today.date and object.time > today.time %}
+			<div class="seminar-edit-link text-nowrap">
+					{% if object.seminar %}
+				<a href="/admin/seminars/edit/{{object.seminar.pk}}">
+					{% else %}
+				<a href="/admin/seminars/edit/{{object.pk}}">
+					{% endif %}
+					Edit this Activity 
+				</a>  
+			</div>
+		{% endif %}
+
+	</div>
+</div>
+{% endblock %}
+{% block footer %}
+{% include 'admin_footer.html'%}
+{% endblock %}

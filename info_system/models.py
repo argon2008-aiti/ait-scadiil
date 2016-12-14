@@ -43,7 +43,6 @@ class CapstoneProject(models.Model):
     def __unicode__(self):
         return self.title
 
-
 class Internship(models.Model):
     company = models.CharField(max_length=100)
     date_started = models.DateField()
@@ -52,7 +51,6 @@ class Internship(models.Model):
 
     def __unicode__(self):
         return self.company
-
 
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE) 
@@ -79,6 +77,16 @@ class Manager(models.Model):
     def __unicode__(self):
         return self.user.first_name +" "+ self.user.last_name
 
+class Activity(models.Model):
+    title = models.CharField(max_length=300)
+    date  = models.DateField()
+    time  = models.TimeField()
+    description = models.TextField()
+    target_school = models.IntegerField(choices=SCHOOL)
+    target_groups = models.CharField(max_length=50)
+
+    def __unicode__(self):
+        return self.title + "--" + str(self.date) + "--" + str(self.time) 
 
 class Seminar(models.Model):
     title = models.CharField(max_length=300) 
@@ -86,24 +94,11 @@ class Seminar(models.Model):
     description = models.TextField()
     date  = models.DateField()
     time  = models.TimeField()
-    academic_year = models.CharField(max_length=20)
-    semester = models.IntegerField(choices=SEMESTER)
     school = models.IntegerField(choices=SCHOOL)
+    activity = models.OneToOneField(Activity)
 
     def __unicode__(self):
         return self.title + ":" + self.speaker
-
-class Activity(models.Model):
-    title = models.CharField(max_length=300)
-    date  = models.DateField()
-    time  = models.TimeField()
-    description = models.TextField()
-    target_school = models.IntegerField(default=3)
-    target_groups = models.CharField(max_length=50)
-    send_reminder = models.BooleanField(default=False)
-
-    def __unicode__(self):
-        return self.title + "--" + self.date + "--" + self.time 
 
 class Message(models.Model):
     subject = models.CharField(max_length=300)
@@ -114,7 +109,7 @@ class Message(models.Model):
         return self.subject 
 
 class MessageScheduler(models.Model):
-    message = models.ForeignKey(Message)
+    message  = models.ForeignKey(Message)
     sch_date = models.DateField()
     sch_time = models.TimeField()
 
@@ -129,5 +124,5 @@ class SeminarAttendance(models.Model):
     authorized_by = models.ForeignKey(Manager)
 
     def __unicode__(self):
-        return self.student.username + "--" + self.seminar.title
+        return self.student.user.username + "--" + self.seminar.title
 

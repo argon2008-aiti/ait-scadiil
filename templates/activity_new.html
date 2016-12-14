@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block contents %}
+<div class="container">
+<div class="page-title">Create New Activity</div>
+	<div class="form-container">
+	    <form class="" action="#" id="new-seminar-form" role="form" method="post">
+		    {% csrf_token %}
+		    <div class="row">
+			<div class="form-group col-sm-12">
+			    <label class="control-label" for="{{form.title.auto_id}}">
+				    {{form.title.label}}
+			    </label>
+				    {% render_field form.title class+="form-control" %}
+			</div>
+
+		    </div>
+
+		    <div class="">
+			<div class="form-group">
+			    <label class="control-label" for="{{form.description.auto_id}}">
+				    {{form.description.label}}
+			    </label>
+				    {% render_field form.description class+="form-control" %}
+			</div>
+		    </div>
+
+		    <div class="row">
+			<div class="form-group col-md-6">
+			    <label class="control-label" for="{{form.date.auto_id}}">
+				    {{form.date.label}}
+			    </label>
+				    {% render_field form.date class+="form-control" %}
+			</div>
+
+			<div class="form-group col-md-6">
+			    <label class="control-label" for="{{form.time.auto_id}}">
+				    {{form.time.label}}
+			    </label>
+				    {% render_field form.time class+="form-control" %}
+			</div>
+		    </div>
+		<div class="form-group">
+	        <label class="control-label">School</label>
+		<div class="radio-group row">
+			<div class="col-sm-4 radio">
+				<input class="custom-radio" type="radio"
+				name="school" id="sates" value=1>
+				<label class="radio-label" for="sates">
+				SATES
+				</label>
+			</div>
+			<div class="col-sm-4 radio">
+				<input class="custom-radio" type="radio" 
+				name="school" id="abs" value=2>
+				<label class="radio-label" for="abs">
+				ABS
+				</label>
+			</div>
+			<div class="col-sm-4 radio">
+				<input class="custom-radio" type="radio"
+				name="school" id="asdass" value=3>
+				<label class="radio-label" for="asdass">
+				ASDASS
+				</label>
+			</div>
+		</div>
+		</div>
+		<div class="form-group">
+	            <label class="control-label">Target Groups</label>
+	        <div class="row">
+			<div class="col-sm-6">
+		    <div class="checkbox">
+				<input class="custom-check" type="checkbox" name="targets[]" id="all" value=0>
+				<label class="check-label" for="all">All Students Enrolled</label>
+		    </div>
+		    <div class="checkbox">
+				<input class="custom-check" type="checkbox" name="targets[]" id="new" value=1>
+				<label class="check-label" for="new">Students Without SCADIIL points </label>
+		    </div>
+		    <div class="checkbox">
+				<input class="custom-check" type="checkbox" name="targets[]" id="cdes-ufs" value=2>
+				<label class="check-label" for="cdes-ufs">Students who have passed CDES or UFS or both</label>
+		    </div>
+		    <div class="checkbox">
+				<input class="custom-check" type="checkbox" name="targets[]" id="pre-intern" value=3>
+				<label class="check-label" for="pre-intern">Students who qualify to commence Internship </label>
+		    </div>
+		    <div class="checkbox">
+				<input class="custom-check" type="checkbox" name="targets[]" id="at-post" value=4>
+				<label class="check-label" for="at-post">Students at post on Internship </label>
+		    </div>
+		    <div class="checkbox">
+				<input class="custom-check" type="checkbox" name="targets[]" id="returnee" value=5>
+				<label class="check-label" for="returnee">Students returning from Internship</label>
+		    </div></div>
+		    <div class="col-sm-6">
+		    <div class="checkbox">
+				<input class="custom-check" type="checkbox" name="targets[]" id="pass-intern" value=6>
+				<label class="check-label" for="pass-intern">Students who have passed Internship</label>
+		    </div>
+		    <div class="checkbox">
+				<input class="custom-check" type="checkbox" name="targets[]" id="cap-prop" value=7>
+				<label class="check-label" for="cap-prop">Students who qualify to start Capstone Project </label>
+		    </div>
+		    <div class="checkbox">
+				<input class="custom-check" type="checkbox" name="targets[]" id="cap-one" value=8>
+				<label class="check-label" for="cap-one">Students who qualify to do Capstone Part One</label>
+		    </div>
+		    <div class="checkbox">
+				<input class="custom-check" type="checkbox" name="targets[]" id="cap-two" value=9>
+				<label class="check-label" for="cap-two">Students who qualify to do Capstone Part Two</label>
+		    </div>
+		    <div class="checkbox">
+				<input class="custom-check" type="checkbox" name="targets[]" id="cap-viva" value=10>
+				<label class="check-label" for="cap-viva">Students who qualify to do Viva</label>
+		    </div>
+		    <div class="checkbox">
+				<input class="custom-check" type="checkbox" name="targets[]" id="passed-viva" value=11>
+				<label class="check-label" for="passed-viva">Students who have passed Viva</label>
+		    </div></div>
+		</div>
+		</div>
+		<div class="">
+			<button type="submit" class="btn btn-primary right" id="">
+				Create This Activity
+			</button>  
+		</div>
+	    </form>
+	</div>
+</div>
+{% endblock %}
+
+{% block footer %}
+{% include 'admin_footer.html'%}
+{% endblock %}

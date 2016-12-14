@@ -1,12 +1,15 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse, HttpResponseRedirect
 from django.db import IntegrityError
-from django.views.generic.edit import FormView 
+from django.conf import settings
+from django.views.generic.edit import FormView, UpdateView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic import View
 from django.views.generic import TemplateView
 from django.contrib.auth.models import User, Group
 from django.contrib import messages
+from django.db.models import Count
 
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
@@ -18,12 +21,16 @@ from django.template import loader
 from django.core.mail import send_mail
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.conf import settings
+from django.core.urlresolvers import reverse
 
-from forms import StudentForm
-from forms import StudentLoginForm
+from forms import StudentForm, UploadForm
+from forms import StudentLoginForm, NewActivityForm
+from forms import NewSeminarForm, EnrolStudentForm
 from models import * 
+from util import excel_reader
 
 from datetime import datetime
+import os
 
 class ContextDataProviderMixin(object):
     role = None
@@ -36,6 +43,7 @@ class ContextDataProviderMixin(object):
         navbar_admin_brand = ''
         title   = 'AIT SCADIIL'
         logout  = 'student:logout'
+        upcoming_count = self.upcoming_count(Activity.objects.all()) 
 
         if self.role == 'admin':
             navbar_admin = 'navbar-admin'
@@ -47,7 +55,20 @@ class ContextDataProviderMixin(object):
         context["navbar_admin_brand"] = navbar_admin_brand
         context["title"]  = title
         context["logout"] = logout
+        context["today"] = datetime.now()
+        context["upcoming_activities_count"] = upcoming_count 
         return context
+
+    def upcoming_count(self, object_list):
+        import datetime
+        count = 0
+        for objet in object_list:
+            if objet.date > datetime.date.today():
+                count = count + 1
+            if objet.date == datetime.date.today() and \
+                    objet.time > datetime.datetime.now().time():
+                count = count + 1
+        return count
 
 class StudentListMixin(object):
 
@@ -117,6 +138,44 @@ class RegisterView(ContextDataProviderMixin, FormView):
         print "form not valid" 
         messages.error(self.request, 'There are issues with your form! Please correct them.')
         return super(RegisterView, self).form_invalid(form)
+
+class EnrolStudentView(ContextDataProviderMixin, FormView):
+
+    def form_valid(self, form):
+        # create a user object from form info
+        try:
+            user = User.objects.create_user(first_name=form.cleaned_data['first_name'],
+                        last_name=form.cleaned_data['surname'],
+                        username=form.cleaned_data['id_number'].upper(),
+                        email=form.cleaned_data['email_address'],
+                        password=form.cleaned_data['surname']+"123")
+            student_group, created = Group.objects.get_or_create(name="student group") 
+            user.groups.add(student_group)
+            print "student added to group successfully"
+
+        except IntegrityError as e:
+            print "Exception Caught!"
+            print e.message
+            if 'UNIQUE constraint' or 'unique constraint' in e.message:
+                # add ID not available error to messages
+                messages.error(self.request, 'There was a problem enrolling your profile; Please \
+                               review the data you provided for errors! If you need help, please \
+                               contact the numbers provided at the bottom of the page.',
+                               extra_tags='id_available')
+                print "ID Exists"
+            return super(EnrolStudentView, self).form_invalid(form)
+
+        # create the student object
+        student = Student(user=user, middle_name=form.cleaned_data['middle_name'],
+                          phone_number=form.cleaned_data['phone_number'],
+                          program=form.cleaned_data['program'])
+        student.save()
+        return super(EnrolStudentView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        print "form not valid" 
+        messages.error(self.request, 'There are issues with your form! Please correct them.')
+        return super(EnrolStudentView, self).form_invalid(form)
 
 
 class LoginView(ContextDataProviderMixin, FormView):
@@ -287,6 +346,10 @@ class StudentView(LoginRequiredMixin, GroupRequiredMixin,  ContextDataProviderMi
     group_required = u"managers"
     raise_exception = True
 
+class StudentDetailsView(LoginRequiredMixin, ContextDataProviderMixin, DetailView):
+    login_url = "/admin/login/"
+    model = Student
+    template_name = 'student_details.html' 
 
 class ScadiilCompletionView(LoginRequiredMixin, ContextDataProviderMixin, StudentListMixin, ListView):
     login_url = "/admin/login/"
@@ -295,7 +358,8 @@ class ScadiilCompletionView(LoginRequiredMixin, ContextDataProviderMixin, Studen
 
     def get_queryset(self):
         queryset = super(ScadiilCompletionView, self).get_queryset()
-        return queryset.filter(capstone__status=3, internship__status=3, seminarattendance__gte=12) 
+        return queryset.annotate(sem_att=Count('seminarattendance')).\
+                                       filter(capstone__status=3, internship__status=3,sem_att__gte=12) 
 
 class AdminActivitiesView(LoginRequiredMixin, GroupRequiredMixin, ContextDataProviderMixin, ListView):
     login_url = "/admin/login/"
@@ -303,6 +367,35 @@ class AdminActivitiesView(LoginRequiredMixin, GroupRequiredMixin, ContextDataPro
     template_name = 'activities.html' 
     group_required = u"managers"
     raise_exception = True
+
+class ActivityDetailsView(LoginRequiredMixin, ContextDataProviderMixin, DetailView):
+    login_url = "/admin/login/"
+    model = Activity
+    template_name = 'activity_details.html' 
+
+class NewActivitiesView(LoginRequiredMixin, ContextDataProviderMixin, FormView):
+    login_url = "/admin/login/"
+    form_class = NewActivityForm
+    template_name = 'activity_new.html' 
+    success_url = './'
+
+    def form_valid(self, form):
+        target_str = ''
+        for target in self.request.POST.getlist('targets[]'):
+            target_str = target_str + target + ','
+
+        new_activity = Activity(title=form.cleaned_data['title'],
+                                description=form.cleaned_data['description'],
+                                date=form.cleaned_data['date'],
+                                time=form.cleaned_data['time'],
+                                target_school=form.cleaned_data['school'],
+                                target_groups=target_str)
+        new_activity.save()
+        return super(NewActivitiesView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        print "invalid form submitted"
+        return super(NewActivitiesView, self).form_invalid(form)
 
 class MessagesView(LoginRequiredMixin, ContextDataProviderMixin, ListView):
     login_url = "/admin/login/"
@@ -323,6 +416,31 @@ class UFSView(LoginRequiredMixin, ContextDataProviderMixin, StudentListMixin, Li
         queryset = super(UFSView, self).get_queryset()
         return queryset.filter(UFS_passed=True) 
 
+class UFSNewGrade(LoginRequiredMixin, ContextDataProviderMixin, FormView):
+    login_url = "/admin/login/"
+    form_class = UploadForm
+    template_name = 'ufs_new.html' 
+    success_url   = './new/review'
+
+    def form_valid(self, form):
+        in_file = self.request.FILES['file']
+        in_file_name = in_file.name
+        util_dir = os.path.join(settings.BASE_DIR, "util")
+        out_file_name = os.path.join(util_dir, in_file_name)
+
+        with open(out_file_name, 'wb+') as destination:
+            for chunk in in_file.chunks():
+                destination.write(chunk)
+
+        grades = excel_reader.read_grade_sheet(out_file_name)
+        self.request.session['grades'] = grades
+        return super(UFSNewGrade, self).form_valid(form)
+
+    def form_invalid(self, form):
+        print "form has some errors"
+        print form.errors
+        return super(UFSNewGrade, self).form_invalid(form)
+
 
 class CDESView(LoginRequiredMixin, ContextDataProviderMixin, StudentListMixin, ListView):
     login_url = "/admin/login/"
@@ -333,6 +451,89 @@ class CDESView(LoginRequiredMixin, ContextDataProviderMixin, StudentListMixin, L
         queryset = super(CDESView, self).get_queryset()
         return queryset.filter(CDES_passed=True) 
 
+class CDESNewGrade(LoginRequiredMixin, ContextDataProviderMixin, FormView):
+    form_class = UploadForm
+    template_name = 'cdes_new.html' 
+    success_url   = './new/review'
+
+    def form_valid(self, form):
+        in_file = self.request.FILES['file']
+        in_file_name = in_file.name
+        util_dir = os.path.join(settings.BASE_DIR, "util")
+        out_file_name = os.path.join(util_dir, in_file_name)
+
+        with open(out_file_name, 'wb+') as destination:
+            for chunk in in_file.chunks():
+                destination.write(chunk)
+
+        grades = excel_reader.read_grade_sheet(out_file_name)
+        self.request.session['grades'] = grades
+
+        return super(CDESNewGrade, self).form_valid(form)
+
+    def form_invalid(self, form):
+        print "form has some errors"
+        return super(CDESNewGrade, self).form_invalid(form)
+
+class GradeListView(LoginRequiredMixin, ContextDataProviderMixin, TemplateView):
+    login_url = "/admin/login/"
+    template_name = 'grade_list.html' 
+    course = None
+
+    def get_context_data(self, **kwargs):
+        context = super(GradeListView, 
+                        self).get_context_data(**kwargs)
+        grades = self.request.session['grades']
+        fail = 0
+
+        for value in grades.itervalues():
+            if value[2] < 60 or value[2] == "i" or value[2] == "I":
+                fail = fail + 1
+
+        context['grades'] = grades
+        context['course'] = self.course
+        context['total'] = len(grades) 
+        context['fail'] = fail 
+        context['pass'] = len(grades)-fail
+        return context
+
+class SaveGrade(LoginRequiredMixin, ContextDataProviderMixin, View):
+    login_url = "/admin/login/"
+    course = None
+
+    def get(self, request, *args, **kwargs):
+        grades = self.request.session['grades']
+
+        if self.course == 'ufs':
+            for value in grades.itervalues():  
+                if value[2] < 60 or value[2] == "i" or value[2] == "I":
+                    continue
+                try:
+                    user = User.objects.get(username=value[1])
+                    student = user.student
+                    student.UFS_passed = True
+                    student.save()
+                except User.DoesNotExist:
+                    print value[1]
+                    pass
+            self.request.session.pop('grades')
+            return redirect("admin:courses-ufs")
+
+        if self.course == 'cdes':
+            for value in grades.itervalues():  
+                if value[2] < 60 or value[2] == "i" or value[2] == "I":
+                    continue
+                try:
+                    user = User.objects.get(username=value[1])
+                    student = user.student
+                    student.CDES_passed = True
+                    student.save()
+                except User.DoesNotExist:
+                    print value[1]
+                    pass
+            self.request.session.pop('grades')
+            return redirect("admin:courses-cdes")
+        return redirect("admin:activities")
 
 class PreInternStudentView(LoginRequiredMixin, ContextDataProviderMixin, StudentListMixin, ListView):
     login_url = "/admin/login/"
@@ -341,7 +542,8 @@ class PreInternStudentView(LoginRequiredMixin, ContextDataProviderMixin, Student
 
     def get_queryset(self):
         queryset = super(PreInternStudentView, self).get_queryset()
-        return queryset.filter(CDES_passed=True, UFS_passed=True, seminarattendance__gte=1) 
+        return queryset.annotate(sem_attendance=Count('seminarattendance')).\
+             filter(CDES_passed=True, UFS_passed=True, sem_attendance__gte=1) 
 
 
 class StudentsAtPostView(LoginRequiredMixin, ContextDataProviderMixin, StudentListMixin, ListView):
@@ -380,11 +582,157 @@ class SeminarAllView(LoginRequiredMixin, ContextDataProviderMixin, ListView):
         context = super(SeminarAllView, 
                         self).get_context_data(**kwargs)
         queryset = self.get_queryset()
-        context["today"] = datetime.now()
         context["sates_count"] = queryset.filter(school=1).count() 
         context["asdass_count"] = queryset.filter(school=3).count() 
         context["abs_count"] = queryset.filter(school=2).count() 
         return context
+
+class NewSeminarAttendanceView(LoginRequiredMixin, ContextDataProviderMixin, FormView):
+    login_url = "/admin/login/"
+    form_class = UploadForm
+    template_name = 'upload_seminar_attendance.html' 
+    success_url = './new/review'
+
+    def form_valid(self, form):
+        in_file = self.request.FILES['file']
+        in_file_name = in_file.name
+        util_dir = os.path.join(settings.BASE_DIR, "util")
+        out_file_name = os.path.join(util_dir, in_file_name)
+
+        with open(out_file_name, 'wb+') as destination:
+            for chunk in in_file.chunks():
+                destination.write(chunk)
+
+        attendance_data = excel_reader.read_attendance_sheet(out_file_name)
+        self.request.session['attendance'] = attendance_data
+        return super(NewSeminarAttendanceView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        print "form has some errors"
+        print form.errors
+        return super(NewSeminarAttendanceView, self).form_invalid(form)
+
+class EditSeminarView(LoginRequiredMixin, ContextDataProviderMixin, UpdateView):
+    login_url = "/admin/login/"
+    template_name = 'seminar_new.html' 
+
+    def get_context_data(self, **kwargs):
+        from django.forms.models import model_to_dict
+        self.object = None
+        context = super(EditSeminarView, 
+                        self).get_context_data(**kwargs)
+        seminar = Seminar.objects.get(pk=kwargs['pk'])  
+        seminar_form = NewSeminarForm(initial=model_to_dict(seminar))
+
+        context['form'] = seminar_form
+        context['heading'] = "Edit This Seminar" 
+        context['button_text'] = "Save Changes" 
+        return context
+
+    def get(self, request, *args, **kwargs):
+        self.object = None
+        return render(request, self.template_name, self.get_context_data(**kwargs))
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = NewSeminarForm(request.POST)
+
+        if form.is_valid():
+            seminar = Seminar.objects.get(pk=kwargs['pk'])  
+            seminar.title=form.cleaned_data['title']
+            seminar.speaker=form.cleaned_data['speaker']
+            seminar.description=form.cleaned_data['description']
+            seminar.date=form.cleaned_data['date']
+            seminar.time=form.cleaned_data['time']
+            seminar.school=form.cleaned_data['school']
+
+            activity = seminar.activity
+            activity.title='USS -- ' + form.cleaned_data['title']
+            activity.description=form.cleaned_data['description']
+            activity.date=form.cleaned_data['date']
+            activity.time=form.cleaned_data['time']
+            activity.target_school=form.cleaned_data['school']
+            activity.target_groups="0,1"
+
+            activity.save()
+            seminar.save()
+            return HttpResponseRedirect('../../details/' + kwargs['pk'])
+        print form.errors
+
+        return render(request, self.template_name, self.get_context_data(**kwargs))
+
+class AttendanceListView(LoginRequiredMixin, ContextDataProviderMixin, TemplateView):
+    login_url = "/admin/login/"
+    template_name = 'attendance_list.html' 
+
+    def get_context_data(self, **kwargs):
+        context = super(AttendanceListView, 
+                        self).get_context_data(**kwargs)
+        attendance = self.request.session['attendance']
+
+        context['attendance'] = attendance 
+        context['total'] = len(attendance) 
+        return context
+
+class SaveAttendanceView(LoginRequiredMixin, ContextDataProviderMixin, View):
+    login_url = "/admin/login/"
+
+    def get(self, request, *args, **kwargs):
+        attendance = self.request.session['attendance']
+        seminar = get_object_or_404(Seminar, pk=kwargs['pk'])
+        unavailable_ids = []
+
+        for value in attendance.itervalues():
+            try:
+                student_user = User.objects.get(username=value[1])
+                student = student_user.student
+                manager = self.request.user.manager
+                seminar_attendance = SeminarAttendance(student=student,
+                                                       authorized_by=manager, 
+                                                       seminar=seminar)
+                seminar_attendance.save()
+            except User.DoesNotExist:
+                unavailable_ids.append(value[1])
+                continue
+        return redirect("admin:activities")
+
+class SeminarNewView(LoginRequiredMixin, ContextDataProviderMixin, FormView):
+    form_class = NewSeminarForm
+    template_name = 'seminar_new.html' 
+    success_url   = '../all'
+
+    def get_context_data(self, **kwargs):
+        context = super(SeminarNewView, 
+                        self).get_context_data(**kwargs)
+
+        context['heading'] = "Create New Seminar" 
+        context['button_text'] = "Create This Seminar" 
+        return context
+
+    def form_valid(self, form):
+        new_activity = Activity(title='USS--' + form.cleaned_data['title'],
+                                description=form.cleaned_data['description'],
+                                date=form.cleaned_data['date'],
+                                time=form.cleaned_data['time'],
+                                target_school=form.cleaned_data['school'],
+                                target_groups="0,1")
+        new_activity.save()
+
+        new_seminar = Seminar(title=form.cleaned_data['title'],
+                              speaker=form.cleaned_data['speaker'],
+                              description=form.cleaned_data['description'],
+                              date=form.cleaned_data['date'],
+                              time=form.cleaned_data['time'],
+                              school=form.cleaned_data['school'],
+                              activity=new_activity)
+        new_seminar.save()
+
+        return super(SeminarNewView, self).form_valid(form)
+
+
+    def form_invalid(self, form):
+        print "form has some errors"
+        return super(SeminarNewView, self).form_invalid(form)
 
 
 class UpcomingSeminarView(LoginRequiredMixin, ContextDataProviderMixin, ListView):
@@ -399,7 +747,6 @@ class UpcomingSeminarView(LoginRequiredMixin, ContextDataProviderMixin, ListView
         context = super(UpcomingSeminarView, 
                         self).get_context_data(**kwargs)
         queryset = self.get_queryset()
-        context["today"] = datetime.now()
         context["sates_count"] = queryset.filter(school=1).count() 
         context["asdass_count"] = queryset.filter(school=3).count() 
         context["abs_count"] = queryset.filter(school=2).count() 
@@ -418,7 +765,6 @@ class PastSeminarView(LoginRequiredMixin, ContextDataProviderMixin, ListView):
         context = super(PastSeminarView, 
                         self).get_context_data(**kwargs)
         queryset = self.get_queryset()
-        context["today"] = datetime.now()
         context["sates_count"] = queryset.filter(school=1).count() 
         context["asdass_count"] = queryset.filter(school=3).count() 
         context["abs_count"] = queryset.filter(school=2).count() 
@@ -428,6 +774,13 @@ class DetailSeminarView(LoginRequiredMixin, ContextDataProviderMixin, DetailView
     login_url = "/admin/login/"
     model = Seminar
     template_name = 'seminar_details.html' 
+
+    def get_context_data(self, **kwargs):
+        context = super(DetailSeminarView, 
+                        self).get_context_data(**kwargs)
+        total_attendance = self.object.seminarattendance_set.all().count()
+        context["attendance_count"] = total_attendance
+        return context
 
 class CapstoneProposalView(LoginRequiredMixin, ContextDataProviderMixin, StudentListMixin, ListView):
     login_url = "/admin/login/"
@@ -468,13 +821,17 @@ class CapstoneCompletionListView(LoginRequiredMixin, ContextDataProviderMixin, S
     model = Student
     template_name = 'capstone_completion_list.html' 
 
-
 class StudentActivitiesView(LoginRequiredMixin, GroupRequiredMixin, ContextDataProviderMixin, ListView):
     login_url = "/student/login/"
     model = Activity
     template_name = 'student_activities.html' 
     group_required = u"student group"
     raise_exception = True
+
+    def get_queryset(self):
+        queryset = super(StudentActivitiesView, self).get_queryset()
+        student_prog = self.request.user.student.program 
+        return queryset.filter(target_school=student_prog).order_by('-date')
 
 class StudentProfileView(LoginRequiredMixin, GroupRequiredMixin, ContextDataProviderMixin, TemplateView):
     login_url = "/student/login/"

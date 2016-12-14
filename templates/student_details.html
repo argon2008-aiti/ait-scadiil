@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block contents %}
+<div class="container">
+<div class="page-title">Student Details</div>
+<hr class="title-separator">
+<div class="student-detail-page">
+        <p class="sub-heading">1. Personal Information</p>
+            <div class="row">
+		<div class="col-sm-4">
+		    <p><b>First Name:</b> {{object.user.first_name}}</p>
+		    <p><b>ID Number:</b> {{object.user.username}}</p>
+		<p><b>School:</b> {%if student.program == 1%}SATES{% elif student.program == 2%}ABS{% else %}ASDASS{% endif %}</p>
+		</div>
+		<div class="col-sm-4">
+		    <p><b>Middle Name:</b> {{object.middle_name}}</p>
+		    <p><b>Email Address:</b> {{object.user.email}}</p>
+		</div>
+		<div class="col-sm-4">
+		    <p><b>Last Name:</b> {{object.user.last_name}}</p>
+		    <p><b>Phone:</b> {{object.phone_number}}</p>
+		</div>
+            </div>
+
+        <p class="sub-heading">2. SCADIIL Courses Information</p>
+	<p><b>University Foundation Studies:</b> {% if object.UFS_passed %}Passed{% else %}Not Passed{% endif %}</p>
+		    <p><b>Career Development and Employability Skills:</b> {% if object.CDES_passed%}Passed{% else %}Not Passed{% endif %}</p>
+
+        <p class="sub-heading">3. USS Attendance</p>
+	    <table class="table">
+		<thead>
+		   {% if object.get_seminar_attendance == 0 %}
+		   <div class="">
+			   <div class="center student-details">
+			       <p>No Seminar has been attended by this student</p>
+			   </div>
+		   </div>
+		   {% else %}
+		   <tr>
+			<th>Seminar</th>   
+			<th>Speaker</th>   
+			<th>Date</th>   
+		   </tr>
+		</thead>
+		<tbody>
+			{% for attendance in object.seminarattendance_set.all %}
+		   <tr>
+			   <td>{{attendance.seminar.title}}</td>
+			   <td>{{attendance.seminar.speaker}}</td>
+			   <td>{{attendance.seminar.date}}</td>
+		   </tr>
+			{% endfor %}
+		   {% endif %}
+		</tbody>
+	    </table>
+        <p class="sub-heading">4. Internship Program</p>
+	     {% if object.internship == None %} <div class=""> <div class="center student-details">
+			       <p>Student is not qualified to start Internship</p>
+			   </div>
+		   </div>
+	     {% endif %}
+        <p class="sub-heading">5. Capstone Project</p>
+	     {% if object.capstone == None %} <div class=""> <div class="center student-details">
+			       <p>Student is not qualified to start Capstone</p>
+			   </div>
+		   </div>
+	     {% endif %}
+	</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block footer %}
+{% include 'admin_footer.html'%}
+{% endblock %}

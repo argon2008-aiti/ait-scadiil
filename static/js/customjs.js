@@ -269,8 +269,14 @@ $('#password-reset-form')
 		   } 
 	       }, 
 	   }
-    })
+    });
+	$('#all').change(function(){
+	    $('.custom-check').prop('checked', this.checked);
+	    console.log("all changed");
+	});
     var active_link = $("ul.submenu-wrapper").children(".active");
     $(".bs-sidebar").animate({scrollTop: active_link.offset().top-300}, 200);
     console.log(active_link.offset().top);
+
 })
+

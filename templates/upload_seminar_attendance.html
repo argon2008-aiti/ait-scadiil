@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block contents %}
+<div class="container">
+<div class="page-title">Upload Attendance Data</div>
+	<div class="form-container gradesheet-form">
+	    <form class="" action="#" id="new-grade-form" enctype= "multipart/form-data" role="form" method="post">
+	        {% csrf_token %}
+		<div>
+			<input id="file" name="file" type="file">
+		</div>
+		<div class="upload">
+			<button type="submit" class="btn btn-primary right" id="">
+				Process Attendance Sheet
+			</button>  
+		</div>
+	    </form>
+	</div>
+</div>
+{% endblock %}
+
+{% block footer %}
+{% include 'admin_footer.html'%}
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block contents %}
+<div class="container">
+	<div class="page-title">{{heading}}</div>
+	<div class="form-container">
+	    <form class="" action="#" id="new-seminar-form" role="form" method="post">
+		    {% csrf_token %}
+		    <div class="row">
+			<div class="form-group col-sm-8">
+			    <label class="control-label" for="{{form.title.auto_id}}">
+				    {{form.title.label}}
+			    </label>
+				    {% render_field form.title class+="form-control" %}
+			</div>
+
+			<div class="form-group col-sm-4">
+			    <label class="control-label" for="{{form.speaker.auto_id}}">
+				    {{form.speaker.label}}
+			    </label>
+				    {% render_field form.speaker class+="form-control" %}
+			</div>
+		    </div>
+
+		    <div class="">
+			<div class="form-group">
+			    <label class="control-label" for="{{form.description.auto_id}}">
+				    {{form.description.label}}
+			    </label>
+				    {% render_field form.description class+="form-control" %}
+			</div>
+		    </div>
+
+		    <div class="row">
+			<div class="form-group col-md-6">
+			    <label class="control-label" for="{{form.date.auto_id}}">
+				    {{form.date.label}}
+			    </label>
+				    {% render_field form.date class+="form-control" %}
+			</div>
+
+			<div class="form-group col-md-6">
+			    <label class="control-label" for="{{form.time.auto_id}}">
+				    {{form.time.label}}
+			    </label>
+				    {% render_field form.time class+="form-control" %}
+			</div>
+		    </div>
+		<div class="form-group">
+	        <label class="control-label">School</label>
+		<div class="radio-group row">
+			<div class="col-sm-4 radio">
+				<input class="custom-radio" type="radio"
+				name="school" id="sates" value=1>
+				<label class="radio-label" for="sates">
+				SATES
+				</label>
+			</div>
+			<div class="col-sm-4 radio">
+				<input class="custom-radio" type="radio" 
+				name="school" id="abs" value=2>
+				<label class="radio-label" for="abs">
+				ABS
+				</label>
+			</div>
+			<div class="col-sm-4 radio">
+				<input class="custom-radio" type="radio"
+				name="school" id="asdass" value=3>
+				<label class="radio-label" for="asdass">
+				ASDASS
+				</label>
+			</div>
+		</div>
+		</div>
+		<div class="">
+			<button type="submit" class="btn btn-primary right" id="">
+				{{button_text}}
+			</button>  
+		</div>
+	    </form>
+	</div>
+</div>
+{% endblock %}
+
+{% block footer %}
+{% include 'admin_footer.html'%}
+{% endblock %}

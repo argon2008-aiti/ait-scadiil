@@ -16,6 +16,9 @@ urlpatterns = [
 
     url(r'^activities/$', StudentActivitiesView.as_view(), name="activities"),
 
+    url(r'^activity/details/(?P<pk>\d+)/$', ActivityDetailsView.as_view(role='student', 
+                template_name='student_activity_details.html'), name="activity-details"),
+
     url(r'^profile/$', StudentProfileView.as_view(), name="profile"),
 
     url(r'^about/$', ScadiilAboutView.as_view(), name="about"),

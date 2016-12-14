@@ -12,7 +12,7 @@
 		      <div class="submenu">
 			<ul class="submenu-wrapper nav nav-pills nav-stacked">
 				<li><a href="{% url 'admin:activities'%}">Activities 
-						<span class="hot badge">23</span></a></li>
+						<span class="hot badge">{{upcoming_activities_count}}</span></a></li>
 				<li><a href="{% url 'admin:messages'%}">Messages</a></li>
 				<li><a href="{% url 'admin:statistics'%}">Statistics</a></li>
 			</ul>
@@ -102,7 +102,7 @@
 
 		    <div class="pull-right">	
 			    <div id="add-student" class="section-item">
-				<a href=""><span class="fa fa-play"> </span> New </a>
+				<a href="{% url 'admin:seminar-new'%}"><span class="fa fa-play"> </span> New </a>
 			    </div>
 			    <div id="sort" class="section-item">
 				<a href=""><span class="fa fa-sort"> </span> Sort By</a>
@@ -131,10 +131,13 @@
 			</div>
 			<div class="row seminar-title-margin">
 				<div class="col-xs-10">
-		        	     <p class="seminar-title">{{seminar.title}}</p>
+		        	     <p class="seminar-title"> {{seminar.title}}</p>
 				</div>
 				<div class="seminar-school">
-					<span class="badge">{%if seminar.school == 1%}sates{% elif seminar.school == 2%}abs{% else %}asdass{% endif %}</span>
+					<span class="badge 
+	{% if seminar.date < today.date or seminar.date == today.date and seminar.time < today.time %} past
+	{% if seminar.seminarattendance_set.count == 0 %} no-attendance {% else %} attendance{% endif %}
+	{% endif %}">{%if seminar.school == 1%}sates{% elif seminar.school == 2%}abs{% else %}asdass{% endif %}</span>
 				</div>
 			</div>
 			<div class="row seminar-info">
@@ -142,7 +145,7 @@
 				<p class="seminar-date text-nowrap">{{seminar.date}} at {{seminar.time}}</p>
 			</div>
 			<div class="row seminar-synopsis">
-		        	<p class="seminar-description col-xs-12">{{seminar.description}}</p>
+		        	<p class="seminar-description col-xs-12">{{seminar.description|truncatewords:35}}</p>
 			</div>
 		</a>
 		</div>
