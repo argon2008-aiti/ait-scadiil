@@ -25,7 +25,7 @@ SECRET_KEY = '4=&_)vzhvv=2iu%l+@_w0os@&2bm8-gvt-1jk78lrv&r&frk^s'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.herokuapp.com']
+ALLOWED_HOSTS = ['*']
 
 # Email sending configurations
 if DEBUG:
